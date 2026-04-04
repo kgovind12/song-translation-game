@@ -8,9 +8,10 @@ const router = express.Router();
 
 // Example playlist IDs (replace later)
 const playlists = {
+  en: "37i9dQZF1DXcBWIGoYBM5M", // English (Today's Top Hits)
   hi: "5haXqGhMX44HRO9rWRdEfZ", // Bollywood Hits
-  es: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
-  global: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
+  es: "1x5OgWCPDfRtsGsdbWGAYm", // Spanish
+  fr: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
 };
 
 router.get("/", async (req, res) => {

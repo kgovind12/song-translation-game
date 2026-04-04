@@ -60,9 +60,17 @@ export default function Home() {
     setVisibleStanzas((prev) => prev + 1);
   };
 
-  // Split lyrics into stanzas (separated by double newline)
+  // Split lyrics into sections of 4 lines each
   const getStanzas = (lyrics: string) => {
-    return lyrics.split('\n\n').filter(stanza => stanza.trim());
+    const lines = lyrics.split('\n').filter(line => line.trim());
+    const sections: string[] = [];
+    
+    for (let i = 0; i < lines.length; i += 4) {
+      const section = lines.slice(i, i + 4).join('\n');
+      sections.push(section);
+    }
+    
+    return sections;
   };
 
   const handleSubmitGuess = () => {
