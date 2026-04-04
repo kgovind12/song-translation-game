@@ -8,6 +8,26 @@ interface SongData {
   translated: string;
 }
 
+// Developer Notes content
+const DEVELOPER_NOTES = {
+  name: "Krithika",
+  intro: "Hi! My name is Krithika and I love creating games. A few notes about Strofi:",
+  notes: [
+    "This game uses real song lyrics from popular playlists across different languages.",
+    "The name Strofi comes from the word 'strophe', which is used in many languages to mean 'stanza' or 'verse'.",
+    "The translation is powered by Google Cloud Translation API, which is why the lyrics may sound a bit funny at times.",
+    "Playlists are fetched using the Spotify API, and lyrics are retrieved using Lyrics.ovh and LRCLIB. Both of these services have rate limits, so if you see any errors, that's likely why!",
+    "Feel free to submit feedback using the feedback button in the top right of the page.",
+    "This is a passion project I built in my free time to combine my love for music, languages, and coding. I hope you enjoy playing it as much as I enjoyed building it!",
+    "Lastly, please support me by sharing the game with your friends and following me using the links below. I have many more fun projects in the works!"
+  ],
+  links: [
+    { label: "LinkedIn", url: "https://linkedin.com/in/krithikagovind" },
+    { label: "GitHub", url: "https://github.com/kgovind12" },
+    { label: "Personal Website", url: "https://krithikagovind.me" }
+  ]
+};
+
 export default function Home() {
   const [fromLang, setFromLang] = useState("hi");
   const [toLang, setToLang] = useState("en");
@@ -16,6 +36,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [visibleStanzas, setVisibleStanzas] = useState(1);
+  const [showDevNotes, setShowDevNotes] = useState(false);
 
   const languages = [
     { code: "en", name: "English" },
@@ -93,7 +114,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white px-4 py-10">
+      {/* Developer Notes Button - Fixed to top right */}
+      <button
+        onClick={() => setShowDevNotes(true)}
+        className="fixed top-4 right-4 text-gray-400 hover:text-white text-sm font-medium transition-colors cursor-pointer z-10"
+      >
+        Developer Notes
+      </button>
+
       <div className="max-w-3xl mx-auto">
+
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
@@ -229,6 +259,56 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Developer Notes Modal */}
+      {showDevNotes && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowDevNotes(false)}
+        >
+          <div 
+            className="bg-[#1a1a1a] rounded-2xl p-8 border border-gray-800 max-w-2xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-3xl font-bold">Developer Notes</h2>
+              <button
+                onClick={() => setShowDevNotes(false)}
+                className="text-gray-400 hover:text-white text-2xl cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+            
+            <p className="text-gray-300 mb-4">
+              {DEVELOPER_NOTES.intro}
+            </p>
+            
+            <ul className="list-disc list-outside ml-5 space-y-2 text-gray-300 mb-6">
+              {DEVELOPER_NOTES.notes.map((note, index) => (
+                <li key={index}>{note}</li>
+              ))}
+            </ul>
+
+            <div className="border-t border-gray-700 pt-4">
+              <p className="text-gray-400 text-sm mb-3">Connect with me:</p>
+              <div className="flex flex-wrap gap-4">
+                {DEVELOPER_NOTES.links.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors cursor-pointer underline"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
