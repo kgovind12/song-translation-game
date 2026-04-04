@@ -16,8 +16,8 @@ const DEVELOPER_NOTES = {
     "This game uses real song lyrics from popular playlists across different languages.",
     "The name Strofi comes from the word 'strophe', which is used in many languages to mean 'stanza' or 'verse'.",
     "The translation is powered by Google Cloud Translation API, which is why the lyrics may sound a bit funny at times.",
-    "Playlists are fetched using the Spotify API, and lyrics are retrieved using Lyrics.ovh and LRCLIB. Both of these services have rate limits, so if you see any errors, that's likely why!",
-    "Feel free to submit feedback using the feedback button in the top right of the page.",
+    "Playlists are fetched using the Spotify API, and lyrics are retrieved using Lyrics.ovh and LRCLIB. Both of these services have rate limits, so if you see any errors, that's likely why. Feel free to submit feedback using the feedback button on the top right of the page.",
+    "This game currently only works on web. Mobile support coming soon.",
     "This is a passion project I built in my free time to combine my love for music, languages, and coding. I hope you enjoy playing it as much as I enjoyed building it!",
     "Lastly, please support me by sharing the game with your friends and following me using the links below. I have many more fun projects in the works!"
   ],
