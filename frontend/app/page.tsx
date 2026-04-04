@@ -15,11 +15,11 @@ const DEVELOPER_NOTES = {
   notes: [
     "This game uses real song lyrics from popular playlists across different languages.",
     "The name Strofi comes from the word 'strophe', which is used in many languages to mean 'stanza' or 'verse'.",
-    "The translation is powered by Google Cloud Translation API, which is why the lyrics may sound a bit funny at times.",
-    "Playlists are fetched using the Spotify API, and lyrics are retrieved using Lyrics.ovh and LRCLIB. Both of these services have rate limits, so if you see any errors, that's likely why. Feel free to submit feedback using the feedback button on the top right of the page.",
-    "This game currently only works on web. Mobile support coming soon.",
+    "The translation is powered by Google Cloud Translation API, so the lyrics may sound funny sometimes.",
+    "Playlists and lyrics are fetched using the Spotify API, Lyrics.ovh, and LRCLIB. All these services have rate limits, which might slow down the site a bit. If you see any issues, feel free to submit your feedback.",
+    "Don't see your language? Let me know or share some song suggestions through the feedback form.",
     "This is a passion project I built in my free time to combine my love for music, languages, and coding. I hope you enjoy playing it as much as I enjoyed building it!",
-    "Lastly, please support me by sharing the game with your friends and following me using the links below. I have many more fun projects in the works!"
+    "If you liked this game, please support me by sharing it with your friends and following me using the links below!"
   ],
   links: [
     { label: "LinkedIn", url: "https://linkedin.com/in/krithikagovind" },
@@ -89,6 +89,11 @@ export default function Home() {
   };
 
   const getSong = async () => {
+    if (fromLang === toLang) {
+      setError("Please select different languages for translation.");
+      return;
+    }
+    
     setLoading(true);
     setError("");
     setSongData(null);
@@ -103,7 +108,7 @@ export default function Home() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch song");
+        throw new Error("Oops, something went wrong. Submit feedback");
       }
 
       const data = await response.json();
@@ -191,7 +196,7 @@ export default function Home() {
                 className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910]"
               >
                 {languages.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
+                  <option key={lang.code} value={lang.code} disabled={lang.code === toLang}>
                     {lang.name}
                   </option>
                 ))}
@@ -217,7 +222,7 @@ export default function Home() {
                 className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910]"
               >
                 {languages.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
+                  <option key={lang.code} value={lang.code} disabled={lang.code === fromLang}>
                     {lang.name}
                   </option>
                 ))}
@@ -238,7 +243,13 @@ export default function Home() {
         {/* Error Message */}
         {error && (
           <div className="bg-red-900/20 border border-red-500 rounded-2xl p-4 mb-8 text-red-300">
-            {error}
+            Oops, something went wrong.{" "}
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="text-[#D75910] hover:text-[#FF9858] underline cursor-pointer font-medium"
+            >
+              Submit feedback?
+            </button>
           </div>
         )}
 
