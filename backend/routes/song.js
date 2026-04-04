@@ -1,14 +1,16 @@
 import express from "express";
 import { getPlaylistTracks } from "../services/spotify.js";
-import { getLyrics } from "../services/musixmatch.js";
 import { translateLyrics } from "../services/translate.js";
+import { getLyricsFromLRCLIB } from "../services/lrclib.js";
+import { getLyricsFromOVH } from "../services/lyricsovh.js";
 
 const router = express.Router();
 
 // Example playlist IDs (replace later)
 const playlists = {
-  hi: "37i9dQZF1DX0XUfTFmNBRM", // Hindi
-  es: "37i9dQZF1DX10zKzsJ2jva", // Spanish
+  hi: "5haXqGhMX44HRO9rWRdEfZ", // Bollywood Hits
+  es: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
+  global: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
 };
 
 router.get("/", async (req, res) => {
@@ -17,23 +19,35 @@ router.get("/", async (req, res) => {
   try {
     const tracks = await getPlaylistTracks(playlists[lang]);
 
-    // Pick random song
-    const random = tracks[Math.floor(Math.random() * tracks.length)];
+    // Try multiple songs until we find one with lyrics
+    for (let i = 0; i < 5; i++) {
+      const random =
+        tracks[Math.floor(Math.random() * tracks.length)];
 
-    const lyrics = await getLyrics(random.artist, random.track);
+      console.log("Trying:", random);
 
-    if (!lyrics) {
-      return res.status(404).json({ error: "Lyrics not found" });
+      let lyrics =
+        (await getLyricsFromLRCLIB(random.artist, random.track)) ||
+        (await getLyricsFromOVH(random.artist, random.track));
+
+      if (!lyrics) continue;
+
+      const translated = await translateLyrics(
+        lyrics,
+        lang,
+        target
+      );
+
+      return res.json({
+        artist: random.artist,
+        track: random.track,
+        translated,
+      });
     }
 
-    const translated = await translateLyrics(lyrics, lang, target);
-
-    res.json({
-      artist: random.artist,
-      track: random.track,
-      translated,
-    });
+    res.status(404).json({ error: "No songs with lyrics found" });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Something failed" });
   }
 });
