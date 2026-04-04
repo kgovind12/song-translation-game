@@ -188,7 +188,7 @@ export default function Home() {
               <select
                 value={fromLang}
                 onChange={(e) => setFromLang(e.target.value)}
-                className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910]"
               >
                 {languages.map((lang) => (
                   <option key={lang.code} value={lang.code}>
@@ -202,7 +202,7 @@ export default function Home() {
             <div className="flex items-end justify-center">
               <button
                 onClick={handleSwap}
-                className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-4 py-3 rounded-lg mt-6 md:mt-0 cursor-pointer"
+                className="bg-[#D75910] hover:bg-[#D66C25] transition-colors text-white font-semibold px-4 py-3 rounded-lg mt-6 md:mt-0 cursor-pointer"
               >
                 ⇄
               </button>
@@ -214,7 +214,7 @@ export default function Home() {
               <select
                 value={toLang}
                 onChange={(e) => setToLang(e.target.value)}
-                className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910]"
               >
                 {languages.map((lang) => (
                   <option key={lang.code} value={lang.code}>
@@ -229,7 +229,7 @@ export default function Home() {
           <button 
             onClick={getSong}
             disabled={loading}
-            className="w-full mt-6 bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-6 bg-[#D75910] hover:bg-[#D66C25] transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Loading..." : "Get Song"}
           </button>
@@ -259,7 +259,7 @@ export default function Home() {
               {visibleStanzas < getStanzas(songData.translated).length && (
                 <button
                   onClick={showMoreStanzas}
-                  className="mt-4 text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center gap-1 transition-colors cursor-pointer"
+                  className="mt-4 text-[#D75910] hover:text-[#FF9858] text-sm font-medium flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   Show more ↓
                 </button>
@@ -291,12 +291,12 @@ export default function Home() {
               onKeyPress={(e) => e.key === "Enter" && handleSubmitGuess()}
               placeholder="Enter song name..."
               disabled={!songData}
-              className="flex-1 p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+              className="flex-1 p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910] disabled:opacity-50"
             />
             <button 
               onClick={handleSubmitGuess}
               disabled={!songData || !guess.trim()}
-              className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-5 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#D75910] hover:bg-[#D66C25] transition-colors text-white font-semibold px-5 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Submit
             </button>
@@ -343,7 +343,7 @@ export default function Home() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors cursor-pointer underline"
+                    className="text-[#D75910] hover:text-[#FF9858] text-sm font-medium transition-colors cursor-pointer underline"
                   >
                     {link.label}
                   </a>
@@ -388,7 +388,7 @@ export default function Home() {
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}
                   placeholder="Share your feedback here..."
-                  className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 text-white resize-none mb-4"
+                  className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910] text-white resize-none mb-4"
                   rows={6}
                   disabled={feedbackLoading}
                 />
@@ -396,7 +396,7 @@ export default function Home() {
                 <button
                   onClick={handleFeedbackSubmit}
                   disabled={!feedbackMessage.trim() || feedbackLoading}
-                  className="w-full bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-[#D75910] hover:bg-[#D66C25] transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {feedbackLoading ? "Sending..." : "Submit Feedback"}
                 </button>
