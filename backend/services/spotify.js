@@ -11,7 +11,7 @@ const TOKENS_FILE = path.join(__dirname, "../tokens.json");
 let accessToken = null;
 let refreshToken = null;
 
-const REDIRECT_URI = "http://127.0.0.1:3001/api/spotify/callback";
+const REDIRECT_URI = process.env.REDIRECT_URI || "http://127.0.0.1:3001/api/spotify/callback";
 const SCOPES = "playlist-read-private playlist-read-collaborative";
 
 // Load tokens from file on startup
