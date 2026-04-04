@@ -9,6 +9,8 @@ import spotifyRoute from "./routes/spotify.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const PORT = process.env.PORT || 3001;
+
 dotenv.config({ path: join(__dirname, ".env") });
 
 const app = express();
@@ -18,6 +20,6 @@ app.use(express.json());
 app.use("/api/song", songRoute);
 app.use("/api/spotify", spotifyRoute);
 
-app.listen(3001, () => {
-  console.log("Server running on http://localhost:3001");
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

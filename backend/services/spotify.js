@@ -170,8 +170,8 @@ export const getPlaylistTracks = async (playlistId) => {
       );
 
       return res.data.items.map((item) => ({
-        artist: item.track.artists[0].name,
-        track: item.track.name,
+        artist: item.item.artists[0].name,
+        track: item.item.name,
       }));
     }
     
