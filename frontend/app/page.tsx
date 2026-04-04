@@ -87,7 +87,7 @@ export default function Home() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            🎵 Song Translation Game
+           Welcome to Strofi 🎵
           </h1>
           <p className="text-gray-400 text-lg">
             Guess the original song based on its translated lyrics. Pick
@@ -97,7 +97,7 @@ export default function Home() {
 
         {/* Controls Card */}
         <div className="bg-[#1a1a1a] rounded-2xl shadow-lg p-6 border border-gray-800 mb-8">
-          <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="flex flex-col md:flex-row items-end gap-4">
             {/* From */}
             <div className="w-full md:w-1/2">
               <label className="block mb-2 text-sm text-gray-400">From:</label>
