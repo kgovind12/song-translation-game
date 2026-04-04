@@ -6,16 +6,23 @@ import { getLyricsFromOVH } from "../services/lyricsovh.js";
 
 const router = express.Router();
 
-// Example playlist IDs (replace later)
+// Spotify playlist IDs
 const playlists = {
-  en: "37i9dQZF1DXcBWIGoYBM5M", // English (Today's Top Hits)
-  hi: "5haXqGhMX44HRO9rWRdEfZ", // Bollywood Hits
-  es: "1x5OgWCPDfRtsGsdbWGAYm", // Spanish
-  fr: "5haXqGhMX44HRO9rWRdEfZ", // Top 50 Global
+  en: "2krHga3EykNYxzctKR1TjT", // English (Today's Top Hits)
+  hi: "3JbQTZaXs0VvKE6NTGD4sU", // Bollywood Hits
+  es: "0P7BfLf0GoAAjLq9pIv8Yu", // Spanish
+  fr: "43wRnCXnxE2zIXDCYwrvlt", // French
+  ko: "2EBz0TQEyNBxkIiOGfspTq", // Korean
+  ta: "21LU3jxAcBvTNHR5LT90rh", // Tamil
 };
 
 router.get("/", async (req, res) => {
   const { lang = "hi", target = "en" } = req.query;
+  
+  console.log("=== SONG REQUEST RECEIVED ===");
+  console.log("Lang:", lang);
+  console.log("Target:", target);
+  console.log("Playlist ID:", playlists[lang]);
 
   try {
     const tracks = await getPlaylistTracks(playlists[lang]);
@@ -48,7 +55,9 @@ router.get("/", async (req, res) => {
 
     res.status(404).json({ error: "No songs with lyrics found" });
   } catch (err) {
-    console.error(err);
+    console.error("ERROR:", err);
+    console.error("Error message:", err.message);
+    console.error("Error stack:", err.stack);
     res.status(500).json({ error: "Something failed" });
   }
 });

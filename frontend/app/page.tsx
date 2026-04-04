@@ -38,9 +38,11 @@ export default function Home() {
     setGuess("");
     setVisibleStanzas(1); // Reset to show only first stanza
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
+
     try {
       const response = await fetch(
-        `https://song-translation-game.onrender.com/api/song?lang=${fromLang}&target=${toLang}`
+        `${apiUrl}/api/song?lang=${fromLang}&target=${toLang}`
       );
 
       if (!response.ok) {
