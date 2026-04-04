@@ -37,6 +37,10 @@ export default function Home() {
   const [error, setError] = useState("");
   const [visibleStanzas, setVisibleStanzas] = useState(1);
   const [showDevNotes, setShowDevNotes] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   const languages = [
     { code: "en", name: "English" },
@@ -50,6 +54,38 @@ export default function Home() {
   const handleSwap = () => {
     setFromLang(toLang);
     setToLang(fromLang);
+  };
+
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackMessage.trim()) return;
+    
+    setFeedbackLoading(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
+    
+    try {
+      const response = await fetch(`${apiUrl}/api/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: feedbackMessage }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to send feedback');
+      }
+      
+      setFeedbackSubmitted(true);
+      setFeedbackMessage("");
+      setTimeout(() => {
+        setShowFeedback(false);
+        setFeedbackSubmitted(false);
+      }, 3000);
+    } catch (err) {
+      alert('Failed to send feedback. Please try again.');
+    } finally {
+      setFeedbackLoading(false);
+    }
   };
 
   const getSong = async () => {
@@ -114,13 +150,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white px-4 py-10">
-      {/* Developer Notes Button - Fixed to top right */}
-      <button
-        onClick={() => setShowDevNotes(true)}
-        className="fixed top-4 right-4 text-gray-400 hover:text-white text-sm font-medium transition-colors cursor-pointer z-10"
-      >
-        Developer Notes
-      </button>
+      {/* Top Right Buttons */}
+      <div className="fixed top-4 right-4 flex gap-4 z-10">
+        <button
+          onClick={() => setShowFeedback(true)}
+          className="text-gray-400 hover:text-white text-sm font-medium transition-colors cursor-pointer"
+        >
+          Feedback
+        </button>
+        <button
+          onClick={() => setShowDevNotes(true)}
+          className="text-gray-400 hover:text-white text-sm font-medium transition-colors cursor-pointer"
+        >
+          Developer Notes
+        </button>
+      </div>
 
       <div className="max-w-3xl mx-auto">
 
@@ -158,7 +202,7 @@ export default function Home() {
             <div className="flex items-end justify-center">
               <button
                 onClick={handleSwap}
-                className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-4 py-3 rounded-lg mt-6 md:mt-0"
+                className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-4 py-3 rounded-lg mt-6 md:mt-0 cursor-pointer"
               >
                 ⇄
               </button>
@@ -185,7 +229,7 @@ export default function Home() {
           <button 
             onClick={getSong}
             disabled={loading}
-            className="w-full mt-6 bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-6 bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Loading..." : "Get Song"}
           </button>
@@ -215,7 +259,7 @@ export default function Home() {
               {visibleStanzas < getStanzas(songData.translated).length && (
                 <button
                   onClick={showMoreStanzas}
-                  className="mt-4 text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center gap-1 transition-colors"
+                  className="mt-4 text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   Show more ↓
                 </button>
@@ -252,7 +296,7 @@ export default function Home() {
             <button 
               onClick={handleSubmitGuess}
               disabled={!songData || !guess.trim()}
-              className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold px-5 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Submit
             </button>
@@ -306,6 +350,58 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#1a1a1a] rounded-2xl shadow-xl p-8 max-w-lg w-full border border-gray-800 relative">
+            <button
+              onClick={() => {
+                setShowFeedback(false);
+                setFeedbackSubmitted(false);
+                setFeedbackMessage("");
+              }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl cursor-pointer"
+            >
+              ×
+            </button>
+            
+            <h2 className="text-2xl font-bold mb-4">
+              How can I make this better?
+            </h2>
+            
+            {feedbackSubmitted ? (
+              <div className="text-center py-8">
+                <p className="text-green-400 text-lg mb-2">✓ Thank you for helping me improve the game!</p>
+                <p className="text-gray-400 text-sm">Your feedback means a lot to me.</p>
+              </div>
+            ) : (
+              <>
+                <p className="text-gray-300 mb-4">
+                  I'd love to hear your thoughts, suggestions, or bug reports. Your feedback helps me make Strofi better for everyone!
+                </p>
+                
+                <textarea
+                  value={feedbackMessage}
+                  onChange={(e) => setFeedbackMessage(e.target.value)}
+                  placeholder="Share your feedback here..."
+                  className="w-full p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 text-white resize-none mb-4"
+                  rows={6}
+                  disabled={feedbackLoading}
+                />
+                
+                <button
+                  onClick={handleFeedbackSubmit}
+                  disabled={!feedbackMessage.trim() || feedbackLoading}
+                  className="w-full bg-orange-500 hover:bg-orange-600 transition-colors text-white font-semibold py-3 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {feedbackLoading ? "Sending..." : "Submit Feedback"}
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

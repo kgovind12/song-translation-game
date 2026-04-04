@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import songRoute from "./routes/song.js";
 import spotifyRoute from "./routes/spotify.js";
+import feedbackRoute from "./routes/feedback.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use("/api/song", songRoute);
 app.use("/api/spotify", spotifyRoute);
+app.use("/api/feedback", feedbackRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
