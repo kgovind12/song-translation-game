@@ -40,7 +40,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:3001/api/song?lang=${fromLang}&target=${toLang}`
+        `https://song-translation-game.onrender.com/api/song?lang=${fromLang}&target=${toLang}`
       );
 
       if (!response.ok) {
