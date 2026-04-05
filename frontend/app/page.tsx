@@ -41,6 +41,8 @@ export default function Home() {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+  const [guessResult, setGuessResult] = useState<"correct" | "wrong" | null>(null);
 
   const languages = [
     { code: "en", name: "English" },
@@ -147,9 +149,32 @@ export default function Home() {
       userGuess === correctAnswer ||
       userGuess === songData.track.toLowerCase()
     ) {
-      alert("🎉 Correct! Well done!");
+      // Correct answer
+      setGuessResult("correct");
+      
+      // Reset everything after a short delay
+      setTimeout(() => {
+        setSongData(null);
+        setGuess("");
+        setVisibleStanzas(1);
+        setError("");
+        setGuessResult(null);
+      }, 2000);
     } else {
-      alert(`❌ Wrong! The correct answer was: ${songData.artist} - ${songData.track}`);
+      // Wrong answer
+      setGuessResult("wrong");
+      setGuess(""); // Clear the input
+      setIsShaking(true);
+      
+      // Remove shake animation after it completes
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+      
+      // Clear the wrong message after a delay
+      setTimeout(() => {
+        setGuessResult(null);
+      }, 2000);
     }
   };
 
@@ -302,7 +327,9 @@ export default function Home() {
               onKeyPress={(e) => e.key === "Enter" && handleSubmitGuess()}
               placeholder="Enter song name..."
               disabled={!songData}
-              className="flex-1 p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910] disabled:opacity-50"
+              className={`flex-1 p-3 rounded-lg bg-[#0f0f0f] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#D75910] disabled:opacity-50 transition-all ${
+                isShaking ? "animate-shake" : ""
+              }`}
             />
             <button 
               onClick={handleSubmitGuess}
@@ -312,6 +339,23 @@ export default function Home() {
               Submit
             </button>
           </div>
+          
+          {/* Result Message */}
+          {guessResult && (
+            <div
+              className={`mt-4 text-center font-semibold text-lg ${
+                guessResult === "correct"
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              {guessResult === "correct" ? (
+                <>🎉 Correct! Well done!</>
+              ) : (
+                <>❌ Wrong! Try again!</>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
