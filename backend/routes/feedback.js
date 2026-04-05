@@ -22,8 +22,9 @@ router.post('/', async (req, res) => {
 
     // Email options
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"Strofi Feedback" <${process.env.EMAIL_USER}>`,
       to: 'krithikagr@gmail.com',
+      replyTo: process.env.EMAIL_USER,
       subject: 'Strofi App Feedback',
       text: message,
       html: `
