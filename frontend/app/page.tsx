@@ -43,6 +43,7 @@ export default function Home() {
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [guessResult, setGuessResult] = useState<"correct" | "wrong" | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const languages = [
     { code: "en", name: "English" },
@@ -178,6 +179,32 @@ export default function Home() {
     }
   };
 
+  const handleSpeakLyrics = () => {
+    if (!songData) return;
+
+    // Stop any ongoing speech
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    // Get visible lyrics
+    const visibleLyrics = getStanzas(songData.translated)
+      .slice(0, visibleStanzas)
+      .join(' ');
+
+    // Create speech utterance
+    const utterance = new SpeechSynthesisUtterance(visibleLyrics);
+    
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    // Speak
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white px-4 py-10">
       {/* Top Right Buttons */}
@@ -279,7 +306,16 @@ export default function Home() {
         )}
 
         {/* Lyrics Display */}
-        <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-800 mb-8 min-h-[200px]">
+        <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-800 mb-8 min-h-[200px] relative">
+          {songData && (
+            <button
+              onClick={handleSpeakLyrics}
+              className="absolute top-4 right-4 text-gray-400 hover:text-[#D75910] transition-colors cursor-pointer text-xl"
+              title={isSpeaking ? "Stop speaking" : "Read lyrics aloud"}
+            >
+              {isSpeaking ? "🔊" : "🔈"}
+            </button>
+          )}
           {songData ? (
             <>
               <div className="whitespace-pre-wrap text-gray-200 leading-relaxed">
